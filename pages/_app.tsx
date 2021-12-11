@@ -8,6 +8,7 @@ import { App as TwApp } from 'tailwind-mobile/react'
 
 const queryClient = new QueryClient()
 
+
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	return (
 		<TwApp theme={'ios'} dark={false}>
