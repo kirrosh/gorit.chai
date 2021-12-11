@@ -9,20 +9,20 @@ interface Props {
 
 const Page = ({ title, children }: Props) => (
 	<>
-		{title ? (
+		{/* {title ? (
 			<Head>
 				<title>Rice Bowl | {title}</title>
 			</Head>
 		) : null}
 
-		<Appbar />
+		<Appbar /> */}
 
 		<main
 			/**
 			 * Padding top = `appbar` height
 			 * Padding bottom = `bottom-nav` height
 			 */
-			className='mx-auto mt-10 pt-20 pb-16 max-w-screen-md'
+			className='max-w-screen-md pt-20 pb-16 mx-auto mt-10'
 		>
 			<div className='p-6'>{children}</div>
 		</main>

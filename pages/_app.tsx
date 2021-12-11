@@ -1,18 +1,23 @@
 import type { AppProps } from 'next/app'
-import { ThemeProvider } from 'next-themes'
 import Meta from '@/components/meta'
 import '@/styles/globals.css'
+import React from 'react'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { SessionProvider } from 'next-auth/react'
+import { App as TwApp } from 'tailwind-mobile/react'
 
-const App = ({ Component, pageProps }: AppProps) => {
+const queryClient = new QueryClient()
+
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	return (
-		<ThemeProvider
-			attribute='class'
-			defaultTheme='system'
-			disableTransitionOnChange
-		>
+		<TwApp theme={'ios'} dark={false}>
 			<Meta />
-			<Component {...pageProps} />
-		</ThemeProvider>
+			<SessionProvider session={session}>
+				<QueryClientProvider client={queryClient}>
+					<Component {...pageProps} />
+				</QueryClientProvider>
+			</SessionProvider>
+		</TwApp>
 	)
 }
 

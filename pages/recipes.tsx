@@ -1,39 +1,29 @@
 import Page from '@/components/page'
 import Section from '@/components/section'
+import { useEffect, useState } from 'react'
+import { useSession, signIn, signOut } from 'next-auth/react'
+import { faunaClient, Q } from '@/lib/fauna'
 
-const Recipes = () => (
-	<Page>
-		<Section>
-			<h2 className='text-xl font-semibold'>Ingredients</h2>
+const Recipes = () => {
+	const [name, setName] = useState('')
+	const session = useSession()
+	console.log(session)
 
-			<div className='mt-2'>
-				<p className='text-zinc-600 dark:text-zinc-400'>
-					Like any good recipe, we appreciate community offerings to cultivate a
-					delicous dish.
-				</p>
-			</div>
-		</Section>
-
-		<Section>
-			<h3 className='font-medium'>Thanks to</h3>
-
-			<ul className='space-y-2 px-6 py-2 list-disc'>
-				<li className='text-sm text-zinc-600 dark:text-zinc-400'>
-					<a href='https://unsplash.com' className='underline'>
-						Unsplash
-					</a>{' '}
-					for high quality images
-				</li>
-
-				<li className='text-sm text-zinc-600 dark:text-zinc-400'>
-					<a href='https://teenyicons.com' className='underline'>
-						Teenyicons
-					</a>{' '}
-					for lovely icons
-				</li>
-			</ul>
-		</Section>
-	</Page>
-)
+	useEffect(() => {
+		faunaClient
+			.query(Q.Get(Q.Ref(Q.Collection('user_info'), '317689268774371525')))
+			.then(console.log)
+	}, [])
+	return (
+		<Page>
+			<Section>
+				<button onClick={() => signIn()}>Log In</button>
+			</Section>
+			<Section>
+				<button onClick={() => signOut()}>Log out</button>
+			</Section>
+		</Page>
+	)
+}
 
 export default Recipes
