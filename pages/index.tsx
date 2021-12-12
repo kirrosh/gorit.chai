@@ -1,7 +1,17 @@
 import Page from '@/components/page'
-import Section from '@/components/section'
+import { Formik } from 'formik'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { Block, Button, Link, Navbar } from 'tailwind-mobile/react'
+import React from 'react'
+import {
+	Block,
+	BlockTitle,
+	Button,
+	Link,
+	List,
+	ListInput,
+	ListItem,
+	Navbar,
+} from 'tailwind-mobile/react'
 
 const Index = () => {
 	const { data: session, status } = useSession()
@@ -13,49 +23,85 @@ const Index = () => {
 	if (status === 'unauthenticated') {
 		return (
 			<Page>
-				<Navbar
-					title={(session?.user?.name as any) || ''}
-					right={
-						<Link navbar onClick={() => signOut()}>
-							Log Out
-						</Link>
-					}
-				/>
 				<Block>
 					<Button onClick={() => signIn()}>Log In</Button>
 				</Block>
 			</Page>
 		)
 	}
+
 	return (
 		<Page>
-			<Section>
-				<h2 className='text-xl font-semibold text-zinc-800 dark:text-zinc-200'>
-					Горький Чай
-				</h2>
-
-				{/* <div className='mt-2'>
-				<p className='text-zinc-600 dark:text-zinc-400'>
-					You love rice, and so does the rest of the world. In the crop year
-					2008/2009, the milled rice production volume amounted to over{' '}
-					<span className='font-medium text-zinc-900 dark:text-zinc-50'>
-						448 million tons
-					</span>{' '}
-					worldwide.
-				</p>
-
-				<br />
-
-				<p className='text-sm text-zinc-600 dark:text-zinc-400'>
-					<a
-						href='https://github.com/mvllow/next-pwa-template'
-						className='underline'
-					>
-						Source
-					</a>
-				</p>
-			</div> */}
-			</Section>
+			<Navbar
+				title={session?.user?.name || ''}
+				right={
+					<Link navbar onClick={() => signOut()}>
+						Log Out
+					</Link>
+				}
+			/>
+			<BlockTitle>Only Inputs Inset</BlockTitle>
+			<Formik
+				initialValues={{ email: '', info: '' }}
+				validate={(values) => {
+					const errors: any = {}
+					if (!values.email) {
+						errors.email = 'Required'
+					} else if (
+						!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+					) {
+						errors.email = 'Invalid email address'
+					}
+					return errors
+				}}
+				onSubmit={(values, { setSubmitting }) => {
+					console.log(values)
+					// setTimeout(() => {
+					// 	alert(JSON.stringify(values, null, 2))
+					setSubmitting(false)
+					// }, 400)
+				}}
+			>
+				{({
+					values,
+					errors,
+					touched,
+					handleChange,
+					handleBlur,
+					handleSubmit,
+					isSubmitting,
+				}) => (
+					<form onSubmit={handleSubmit}>
+						<List inset>
+							<ListInput
+								type='email'
+								name='email'
+								placeholder='Email'
+								onChange={handleChange}
+								onBlur={handleBlur}
+								value={values.email}
+							/>
+							<ListInput
+								label='Textarea'
+								type='textarea'
+								placeholder='Описание'
+								inputClassName='h-[120px] resize-none'
+								name='info'
+								onChange={handleChange}
+								onBlur={handleBlur}
+								value={values.info}
+							/>
+							<Button
+								// @ts-ignore
+								type='submit'
+								disabled={isSubmitting}
+							>
+								Save
+							</Button>
+						</List>
+					</form>
+				)}
+			</Formik>
 		</Page>
 	)
 }
