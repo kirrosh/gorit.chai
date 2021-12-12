@@ -22,7 +22,7 @@ const cors = Cors({
 })
 
 const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-	console.log('webhookHandler')
+	console.log('webhookHandler!')
 
 	if (req.method === 'POST') {
 		const buf = await buffer(req)
