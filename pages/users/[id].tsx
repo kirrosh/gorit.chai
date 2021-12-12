@@ -1,47 +1,31 @@
 import CheckoutForm from '@/components/CheckoutForm'
-import getStripe from '@/utils/get-stripejs'
-
-import { useSession } from 'next-auth/react'
 
 import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { useQuery } from 'react-query'
-import {
-	Block,
-	Button,
-	Chip,
-	List,
-	ListInput,
-	Navbar,
-	Page,
-} from 'tailwind-mobile/react'
+
+import { Block, Button, Navbar, Page } from 'tailwind-mobile/react'
+import { getUserInfo } from '../api/profile'
 
 const inactiveColor = {}
 const activeColor = { bg: 'bg-green-500', text: 'text-white' }
 
-const User = () => {
-	// const { data: session, status } = useSession()
-	const [value, setValue] = useState<number>()
+export async function getServerSideProps(context: any) {
+	const id = context.query.id
+	const userInfo: any = await getUserInfo(id)
+
+	if (!userInfo) {
+		return {
+			notFound: true,
+		}
+	}
+
+	return {
+		props: { data: userInfo.data }, // will be passed to the page component as props
+	}
+}
+
+const User = ({ data }: { data: any }) => {
 	const router = useRouter()
 	const id = router.query.id
-	console.log(id)
-	const { data, isLoading } = useQuery(
-		'profile',
-		async () => {
-			const res = await fetch(`/api/profile?id=${id}`)
-			return await res.json()
-		},
-		{ enabled: !!id, retry: false }
-	)
-
-	if (isLoading) {
-		return '...'
-	}
-
-	if (!data) {
-		return 'Not Found'
-	}
-
 	return (
 		<Page>
 			<CheckoutForm />
