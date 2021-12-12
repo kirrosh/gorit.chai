@@ -23,7 +23,6 @@ const ResultPage: NextPage = () => {
 			<h1>Статус оплаты:</h1>
 			<h2>Status: {data?.payment_intent?.status ?? 'loading...'}</h2>
 			<h3>Оплата прошла успешно!</h3>
-			{data}
 		</div>
 	)
 }
