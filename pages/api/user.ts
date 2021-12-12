@@ -7,7 +7,7 @@ export const getUserInfo = (id: string) => {
 	return faunaClient.query(q.Get(q.Match(q.Index('user_info_by_id'), id)))
 }
 
-interface IUserInfo {
+export interface IUserInfo {
 	userId: string
 	fullName?: string
 	email?: string
@@ -21,16 +21,26 @@ export const createOrUpdateUserInfo = async ({
 	description,
 }: IUserInfo) => {
 	console.log('createOrUpdateUserInfo')
-
-	const userInfo = await getUserInfo(userId)
-	console.log({ userInfo })
+	const userInfo = await (async () => {
+		try {
+			return await getUserInfo(userId)
+		} catch (e) {
+			console.log(e)
+			return undefined
+		}
+	})()
+	// try {
+	// 	const userInfo = await getUserInfo(userId)
+	// 	console.log({ userInfo })
+	// } catch (e) {
+	// 	console.log(e)
+	// }
 
 	if (userInfo) {
 		return faunaClient.query(
 			q.Update(q.Ref(q.Collection('user_info'), '1'), {
 				data: {
-					//@ts-ignore
-					id: session.userid,
+					userId,
 					fullName,
 					email,
 					description,
@@ -41,8 +51,7 @@ export const createOrUpdateUserInfo = async ({
 		return faunaClient.query(
 			q.Create(q.Collection('user_info'), {
 				data: {
-					//@ts-ignore
-					id: session.userid,
+					userId,
 					fullName,
 					email,
 					description,
@@ -60,7 +69,9 @@ const User = async (req: NextApiRequest, res: NextApiResponse) => {
 
 	if (session?.user) {
 		if (req.method === 'POST') {
-			data = await createUserInfo(session)
+			data = await createOrUpdateUserInfo({
+				...req.body,
+			})
 		}
 		if (req.method === 'PATCH') {
 		}
@@ -68,7 +79,7 @@ const User = async (req: NextApiRequest, res: NextApiResponse) => {
 			data = await getUserInfo(req.body.userId || session.userid)
 		}
 	}
-
+	console.log(data)
 	res.status(200).json(data)
 }
 
