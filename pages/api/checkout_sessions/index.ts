@@ -13,6 +13,7 @@ export default async function handler(
 	res: NextApiResponse
 ) {
 	if (req.method === 'POST') {
+		console.log({ body: req.body })
 		const amount: number = req.body.amount
 		try {
 			// Validate the amount that was passed from the client.
@@ -25,7 +26,7 @@ export default async function handler(
 				payment_method_types: ['card'],
 				line_items: [
 					{
-						name: 'Custom amount donation',
+						name: `userId: ${req.body.userId}`,
 						amount: formatAmountForStripe(amount, CURRENCY),
 						currency: CURRENCY,
 						quantity: 1,
