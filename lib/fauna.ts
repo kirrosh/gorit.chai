@@ -7,4 +7,4 @@ export const faunaClient = new FaunaClient({
 	scheme: 'https',
 })
 
-export const Q = query
+export const q = query

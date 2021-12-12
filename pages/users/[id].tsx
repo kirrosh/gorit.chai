@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useQuery } from 'react-query'
 import {
 	Block,
 	Button,
-	Card,
+	Chip,
+	List,
+	ListInput,
 	Navbar,
 	Page,
-	Chip,
-	ListInput,
-	List,
 } from 'tailwind-mobile/react'
 
 const inactiveColor = {}
@@ -18,6 +18,13 @@ const User = () => {
 	const router = useRouter()
 	const userId = router.query['id']
 	const [value, setValue] = useState<number>()
+	const { data } = useQuery('userInfo', () =>
+		fetch('/api/user', {
+			method: 'POST',
+			body: JSON.stringify({ user: 'fake' }),
+		})
+	)
+	console.log({ data })
 
 	if (typeof userId !== 'string') {
 		return null
