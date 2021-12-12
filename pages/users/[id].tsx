@@ -28,7 +28,7 @@ const User = ({ data }: { data: any }) => {
 	const id = router.query.id
 	return (
 		<Page>
-			<CheckoutForm userId={id} />
+			<CheckoutForm userId={typeof id === 'string' ? id : ''} />
 
 			<Navbar title={'ГорькийЧай'} />
 			<div className='flex justify-center p-3 text-lg'>{data?.fullName}</div>
