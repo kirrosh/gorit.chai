@@ -1,3 +1,6 @@
+import CheckoutForm from '@/components/CheckoutForm'
+import getStripe from '@/utils/get-stripejs'
+
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -40,6 +43,8 @@ const User = () => {
 
 	return (
 		<Page>
+			<CheckoutForm />
+
 			<Navbar title={'ГорькийЧай'} />
 			<div className='flex justify-center p-3 text-lg'>{data?.fullName}</div>
 
@@ -61,7 +66,7 @@ const User = () => {
 						Сколько хотите оставить?
 					</div>
 
-					<List>
+					{/* <List>
 						<ListInput
 							inlineLabel
 							type='number'
@@ -71,10 +76,10 @@ const User = () => {
 							}}
 							value={value}
 						/>
-					</List>
+					</List> */}
 
 					<div>
-						<Chip
+						{/* <Chip
 							className='m-0.5'
 							onClick={() => setValue(50)}
 							colors={Number(value) === 50 ? activeColor : inactiveColor}
@@ -115,7 +120,7 @@ const User = () => {
 							colors={Number(value) === 550 ? activeColor : inactiveColor}
 						>
 							550р
-						</Chip>
+						</Chip> */}
 					</div>
 				</Block>
 
