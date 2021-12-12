@@ -13,14 +13,19 @@
 <p>https://docs.google.com/presentation/d/1OjGqmHjTjLfnsq2uR0fqE6ae2tWyDCScE3gHHgwTiEQ/edit?usp=sharing</p>
 
 <p>Для работы нужно добавить env переменные</p>
+
 SPOTIFY_CLIENT_ID
+
 SPOTIFY_CLIENT_SECRET
 
-GITHUB_CLIENT_I
+GITHUB_CLIENT_ID
+
 GITHUB_CLIENT_SECRET
 
 NEXT_PUBLIC_FAUNA_SECRET
+
 FAUNA_SECRET
 
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+
 STRIPE_SECRET_KEY
