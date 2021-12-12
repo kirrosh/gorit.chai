@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/react'
 import { Session } from 'next-auth'
 
 export const getUserInfo = (id: string) => {
+	console.log(id)
 	return faunaClient.query(q.Get(q.Match(q.Index('user_info_by_id'), id)))
 }
 
@@ -35,7 +36,7 @@ export const createOrUpdateUserInfo = async ({
 	// } catch (e) {
 	// 	console.log(e)
 	// }
-	console.log({ userInfo, userId, fullName, email, description })
+	// console.log({ userInfo, userId, fullName, email, description })
 
 	if (userInfo) {
 		return faunaClient.query(
@@ -69,6 +70,7 @@ const User = async (req: NextApiRequest, res: NextApiResponse) => {
 	let data
 
 	if (session?.user) {
+		console.log(req.method)
 		if (req.method === 'POST') {
 			data = await createOrUpdateUserInfo({
 				...JSON.parse(req.body),
@@ -77,10 +79,22 @@ const User = async (req: NextApiRequest, res: NextApiResponse) => {
 		if (req.method === 'PATCH') {
 		}
 		if (req.method === 'GET') {
-			data = await getUserInfo(req.body.userId || session.userid)
+			console.log(session)
+			// data = await getUserInfo(req.body.userId || session.userid)
+			const userInfo = await (async () => {
+				try {
+					//@ts-ignore
+					return await getUserInfo(session.userId)
+				} catch (e) {
+					console.log(e)
+					return {}
+				}
+			})()
+			//@ts-ignore
+			data = userInfo.data
 		}
 	}
-	console.log(data)
+	// console.log(data)
 	res.status(200).json(data)
 }
 
