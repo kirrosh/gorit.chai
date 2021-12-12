@@ -35,6 +35,7 @@ export const createOrUpdateUserInfo = async ({
 	// } catch (e) {
 	// 	console.log(e)
 	// }
+	console.log({ userInfo, userId, fullName, email, description })
 
 	if (userInfo) {
 		return faunaClient.query(
@@ -70,7 +71,7 @@ const User = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (session?.user) {
 		if (req.method === 'POST') {
 			data = await createOrUpdateUserInfo({
-				...req.body,
+				...JSON.parse(req.body),
 			})
 		}
 		if (req.method === 'PATCH') {
