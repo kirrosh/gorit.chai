@@ -13,7 +13,7 @@ const Page = ({ title, children }: Props) => (
 	<App>
 		{/* {title ? (
 			<Head>
-				<title>Rice Bowl | {title}</title>
+				<title>Горький Чай | {title}</title>
 			</Head>
 		) : null}
 

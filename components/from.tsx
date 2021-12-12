@@ -1,16 +1,15 @@
 import { values } from 'faunadb'
 import { useFormik } from 'formik'
+import { useSession } from 'next-auth/react'
 import React from 'react'
 import { useMutation } from 'react-query'
-import { List, ListInput, Button } from 'tailwind-mobile/react'
+import { List, ListInput, Button, BlockTitle } from 'tailwind-mobile/react'
 
-type Props = {
-	data: any
-}
-const Form = ({ data }: Props) => {
+const Form = () => {
+	const { data: session, status } = useSession()
 	const { values, handleSubmit, handleBlur, handleChange, isSubmitting } =
 		useFormik({
-			initialValues: data,
+			initialValues: { email: '', fullName: '', description: '' },
 			validate: (values) => {
 				const errors: any = {}
 				if (!values.email) {
@@ -18,7 +17,7 @@ const Form = ({ data }: Props) => {
 				} else if (
 					!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
 				) {
-					errors.email = 'Invalid email address'
+					errors.email = 'Неправильный email'
 				}
 				return errors
 			},
@@ -33,7 +32,6 @@ const Form = ({ data }: Props) => {
 	const { mutate } = useMutation((values: any) =>
 		fetch('/api/user', {
 			body: JSON.stringify({
-				//@ts-ignore
 				userId: session?.userId,
 				...values,
 			}),
@@ -41,42 +39,45 @@ const Form = ({ data }: Props) => {
 		})
 	)
 	return (
-		<form onSubmit={handleSubmit}>
-			<List inset>
-				<ListInput
-					name='fullName'
-					placeholder='fullName'
-					onChange={handleChange}
-					onBlur={handleBlur}
-					value={values.fullName}
-				/>
-				<ListInput
-					type='email'
-					name='email'
-					placeholder='Email'
-					onChange={handleChange}
-					onBlur={handleBlur}
-					value={values.email}
-				/>
-				<ListInput
-					label='Textarea'
-					type='textarea'
-					placeholder='Описание'
-					inputClassName='h-[120px] resize-none'
-					name='description'
-					onChange={handleChange}
-					onBlur={handleBlur}
-					value={values.description}
-				/>
-				<Button
-					// @ts-ignore
-					type='submit'
-					disabled={isSubmitting}
-				>
-					Save
-				</Button>
-			</List>
-		</form>
+		<>
+			<BlockTitle>Заполните информацию о себе.</BlockTitle>
+			<form onSubmit={handleSubmit}>
+				<List inset>
+					<ListInput
+						name='fullName'
+						placeholder='Имя'
+						onChange={handleChange}
+						onBlur={handleBlur}
+						value={values.fullName}
+					/>
+					<ListInput
+						type='email'
+						name='email'
+						placeholder='Email'
+						onChange={handleChange}
+						onBlur={handleBlur}
+						value={values.email}
+					/>
+					<ListInput
+						label='Textarea'
+						type='textarea'
+						placeholder='Описание'
+						inputClassName='h-[120px] resize-none'
+						name='description'
+						onChange={handleChange}
+						onBlur={handleBlur}
+						value={values.description}
+					/>
+					<Button
+						// @ts-ignore
+						type='submit'
+						disabled={isSubmitting}
+					>
+						Save
+					</Button>
+				</List>
+			</form>
+		</>
 	)
 }
 

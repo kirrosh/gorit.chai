@@ -3,6 +3,10 @@ import { useRouter } from 'next/router'
 
 import { fetchGetJSON } from '../utils/api-helpers'
 import useSWR from 'swr'
+import React from 'react'
+import Page from '@/components/page'
+
+import { GrStatusGood } from 'react-icons/gr'
 
 const ResultPage: NextPage = () => {
 	const router = useRouter()
@@ -16,14 +20,26 @@ const ResultPage: NextPage = () => {
 		fetchGetJSON
 	)
 
-	if (error) return <div>failed to load</div>
+	if (error)
+		return (
+			<Page>
+				<div className='grid place-items-center'>Ошибка :(</div>
+			</Page>
+		)
 
 	return (
-		<div className='page-container'>
-			<h1>Статус оплаты:</h1>
-			<h2>Status: {data?.payment_intent?.status ?? 'loading...'}</h2>
-			<h3>Оплата прошла успешно!</h3>
-		</div>
+		<Page>
+			<div className='grid place-items-center h-[100vh]'>
+				<div className='grid place-items-center'>
+					{data?.payment_intent?.status ? (
+						<GrStatusGood size={100} color='#6226f3' />
+					) : (
+						''
+					)}
+					<h1>Спасибо!</h1>
+				</div>
+			</div>
+		</Page>
 	)
 }
 

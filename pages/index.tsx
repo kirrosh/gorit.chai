@@ -14,21 +14,24 @@ import {
 	ListItem,
 	Navbar,
 } from 'tailwind-mobile/react'
+import Info from '@/components/info'
 
 const Index = () => {
 	const { data: session, status } = useSession()
 	const userId: any = session?.userId
-	const { data } = useQuery('User', async () => {
-		const res = await fetch('/api/user')
-		return res.json()
-	})
-	// console.log(data)
+	const { data } = useQuery(
+		'User',
+		async () => {
+			const res = await fetch('/api/profile?id=' + userId)
+			return res.json()
+		},
+		{ enabled: !!userId }
+	)
 
 	if (status === 'loading') {
 		return '...'
 	}
 
-	
 	if (status === 'unauthenticated') {
 		return (
 			<Page>
@@ -42,26 +45,35 @@ const Index = () => {
 	return (
 		<Page>
 			<Navbar
-				title={session?.user?.name || ''}
+				title={data?.fullName || session?.user?.name}
 				right={
 					<Link navbar onClick={() => signOut()}>
 						Log Out
 					</Link>
 				}
 			/>
-			<BlockTitle>Only Inputs Inset</BlockTitle>
-			{data && <Form data={data} />}
-			<Block>
-				<div className='grid place-content-center'>
-					{userId && (
-						<QRCode
-							value={`https://gorky-chai.vercel.app/users/${userId}`}
-							level='Q'
-							size={200}
-						/>
+
+			{!data ? (
+				<Form />
+			) : (
+				<>
+					<Info data={data} />
+					{userId && data && (
+						<>
+							<Block>
+								<div className='grid place-content-center'>
+									<h1>Ваш QR-код</h1>
+									<QRCode
+										value={`https://gorky-chai.vercel.app/users/${userId}`}
+										level='Q'
+										size={200}
+									/>
+								</div>
+							</Block>
+						</>
 					)}
-				</div>
-			</Block>
+				</>
+			)}
 		</Page>
 	)
 }
