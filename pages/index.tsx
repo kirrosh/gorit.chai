@@ -28,6 +28,7 @@ const Index = () => {
 		return '...'
 	}
 
+	
 	if (status === 'unauthenticated') {
 		return (
 			<Page>
