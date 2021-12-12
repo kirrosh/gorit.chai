@@ -12,7 +12,6 @@ const Info = ({ data }: Props) => {
 			<Block>{data.description}</Block>
 			<BlockTitle className='text-2xl'>Email</BlockTitle>
 			<Block>{data.email}</Block>
-			<BlockTitle className='text-2xl'>Transactions</BlockTitle>
 		</>
 	)
 }
