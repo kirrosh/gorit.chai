@@ -4,6 +4,7 @@ import { Block, Button, Link, Navbar, Page } from 'tailwind-mobile/react'
 
 const User = () => {
 	const { data: session, status } = useSession()
+	console.log(session)
 	if (status === 'loading') {
 		return '...'
 	}
