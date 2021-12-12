@@ -16,27 +16,32 @@ const inactiveColor = {}
 const activeColor = { bg: 'bg-green-500', text: 'text-white' }
 
 const User = () => {
-	const { data: session, status } = useSession()
-	console.log({ session })
-	const router = useRouter()
-	const userId = router.query['id']
+	// const { data: session, status } = useSession()
 	const [value, setValue] = useState<number>()
-	const { data } = useQuery('userInfo', () =>
-		fetch('/api/user', {
-			method: 'POST',
-			body: JSON.stringify({ user: 'fake' }),
-		})
+	const router = useRouter()
+	const id = router.query.id
+	console.log(id)
+	const { data, isLoading } = useQuery(
+		'profile',
+		async () => {
+			const res = await fetch(`/api/profile?id=${id}`)
+			return await res.json()
+		},
+		{ enabled: !!id, retry: false }
 	)
-	console.log({ data })
 
-	if (typeof userId !== 'string') {
-		return null
+	if (isLoading) {
+		return '...'
+	}
+
+	if (!data) {
+		return 'Not Found'
 	}
 
 	return (
 		<Page>
 			<Navbar title={'ГорькийЧай'} />
-			<div className='flex justify-center p-3 text-lg'>Николай Первый</div>
+			<div className='flex justify-center p-3 text-lg'>{data?.fullName}</div>
 
 			<Block title={'Николай Первый'} className='flex justify-center '>
 				<div className='relative flex items-center justify-center w-12 h-12 m-1 mr-2 text-xl text-white uppercase bg-green-500 rounded-full'>
