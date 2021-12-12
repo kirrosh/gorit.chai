@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 	apiVersion: null,
 })
 
-const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!
+const webhookSecret: string = process.env.STRIPE_SECRET_KEY!
 
 // Stripe requires the raw body to construct the event.
 export const config = {
