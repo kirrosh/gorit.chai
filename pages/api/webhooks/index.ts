@@ -22,7 +22,7 @@ const cors = Cors({
 })
 
 const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-	console.log('webhookHandler')
+	console.log('webhookHandler!')
 
 	if (req.method === 'POST') {
 		const buf = await buffer(req)
@@ -42,10 +42,16 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 		// Successfully constructed event.
 		console.log('✅ Success:', event.id)
 
+		if (event.type === 'payment_intent.created') {
+			const paymentIntent = event.data.object as Stripe.PaymentIntent
+			console.dir(paymentIntent)
+		}
+
 		// Cast event data to Stripe object.
 		if (event.type === 'payment_intent.succeeded') {
 			const paymentIntent = event.data.object as Stripe.PaymentIntent
 			console.log(`💰 PaymentIntent status: ${paymentIntent.status}`)
+			console.dir(event)
 		} else if (event.type === 'payment_intent.payment_failed') {
 			const paymentIntent = event.data.object as Stripe.PaymentIntent
 			console.log(
@@ -53,6 +59,7 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 			)
 		} else if (event.type === 'charge.succeeded') {
 			const charge = event.data.object as Stripe.Charge
+			console.dir(charge)
 			console.log(`💵 Charge id: ${charge.id}`)
 		} else {
 			console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`)
