@@ -1,10 +1,11 @@
+import { faunaClient } from '@/lib/fauna'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Block, Button, Link, Navbar, Page } from 'tailwind-mobile/react'
 
 const User = () => {
 	const { data: session, status } = useSession()
-	console.log(session)
+
 	if (status === 'loading') {
 		return '...'
 	}

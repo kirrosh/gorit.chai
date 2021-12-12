@@ -19,21 +19,8 @@ export default NextAuth({
 	],
 	adapter: FaunaAdapter(faunaClient),
 	callbacks: {
-		async jwt({ token, account, profile, isNewUser }) {
-			console.log('account:', account)
-			console.log('profile:', profile)
-			if (account?.provider === 'github') {
-				token.github = account
-			}
-			return token
-		},
-		async session({ session, user, token }) {
-			//@ts-ignore
-			console.log('session', session)
-			console.log('token', token)
-			//@ts-ignore
-			// session.user = user;
-			session.token = token
+		async session({ session, token, user }) {
+			session.userId = user.id
 			return session
 		},
 	},

@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -15,6 +16,8 @@ const inactiveColor = {}
 const activeColor = { bg: 'bg-green-500', text: 'text-white' }
 
 const User = () => {
+	const { data: session, status } = useSession()
+	console.log({ session })
 	const router = useRouter()
 	const userId = router.query['id']
 	const [value, setValue] = useState<number>()
