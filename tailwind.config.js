@@ -26,9 +26,9 @@ module.exports = tailwindMobile({
 				'page-ios-light': '#efeff4',
 				'page-ios-dark': '#212121',
 				primary: {
-					light: '#40916c',
-					DEFAULT: '#40916c',
-					dark: '#40916c',
+					light: '#6226f3',
+					DEFAULT: '#6226f3',
+					dark: '#6226f3',
 				},
 				secondary: '#457b9d',
 			},

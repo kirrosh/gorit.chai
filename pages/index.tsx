@@ -1,5 +1,6 @@
 import Form from '@/components/from'
 import Page from '@/components/page'
+import QRCode from 'qrcode.react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import React from 'react'
 import { useMutation, useQuery } from 'react-query'
@@ -16,7 +17,7 @@ import {
 
 const Index = () => {
 	const { data: session, status } = useSession()
-
+	const userId: any = session?.userId
 	const { data } = useQuery('User', async () => {
 		const res = await fetch('/api/user')
 		return res.json()
@@ -49,6 +50,17 @@ const Index = () => {
 			/>
 			<BlockTitle>Only Inputs Inset</BlockTitle>
 			{data && <Form data={data} />}
+			<Block>
+				<div className='grid place-content-center'>
+					{userId && (
+						<QRCode
+							value={`https://gorky-chai.vercel.app/users/${userId}`}
+							level='Q'
+							size={200}
+						/>
+					)}
+				</div>
+			</Block>
 		</Page>
 	)
 }

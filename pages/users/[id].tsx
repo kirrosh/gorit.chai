@@ -2,6 +2,7 @@ import CheckoutForm from '@/components/CheckoutForm'
 import getStripe from '@/utils/get-stripejs'
 
 import { useSession } from 'next-auth/react'
+
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
